@@ -18,5 +18,15 @@ module.exports = function transformer(file, api) {
     importStatement.replace(j.importDeclaration(variable, j.literal('@ember/service')));
   });
 
+  let serviceInjections = root.find(j.ObjectProperty, {
+    decorators: [{ type: 'Decorator', expression: { type: 'Identifier', name: 'service'} }]
+  });
+
+  serviceInjections.forEach((injection) => {
+    let key = j.identifier(injection.value.key.name);
+    let value = j.callExpression(j.identifier('service'), []);
+    injection.replace(j.objectProperty(key, value));
+  });
+
   return root.toSource({ quote: 'single' });
 }
