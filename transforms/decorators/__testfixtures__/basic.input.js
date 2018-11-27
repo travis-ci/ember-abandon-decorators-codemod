@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import { service } from 'ember-decorators/service';
 import { controller } from 'ember-decorators/controller';
-import { alias } from 'ember-decorators/object/computed';
+import { alias, not } from 'ember-decorators/object/computed';
 
 export default Component.extend({
   @service scroller: null,
@@ -10,6 +10,7 @@ export default Component.extend({
   @controller('intersectionality') intersectionalityController: null,
 
   @alias('audreLorde') lorde: null,
+  @not('patriarchal') feminist: null,
 
   didInsertElement() {
     this._super(...arguments);

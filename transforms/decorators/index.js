@@ -59,18 +59,24 @@ module.exports = function transformer(file, api) {
   });
 
   macroImportStatements.forEach((importStatement) => {
-    let variable = [j.importSpecifier(j.identifier('alias'), j.identifier('alias'))];
+    let variable = importStatement.value.specifiers;
   
     importStatement.replace(j.importDeclaration(variable, j.literal('@ember/object/computed')));
   });
 
-  let macros = root.find(j.ObjectProperty, {
-    decorators: [{type: 'Decorator', expression: { type: 'CallExpression', callee: { type: 'Identifier', name: 'alias' }}}]
+  let macros = root.find(j.ObjectProperty, (property) => {
+    if (!property.decorators) {
+      return false;
+    }
+
+    let decorator = property.decorators[0];
+
+    return decorator && ['alias', 'not'].includes(decorator.expression.callee.name);
   });
 
   macros.forEach((injection) => {
     let key = j.identifier(injection.value.key.name);
-    let value = j.callExpression(j.identifier('alias'), [j.literal(injection.value.decorators[0].expression.arguments[0].value)]);
+    let value = j.callExpression(j.identifier(injection.value.decorators[0].expression.callee.name), [j.literal(injection.value.decorators[0].expression.arguments[0].value)]);
     injection.replace(j.objectProperty(key, value));
   });
 

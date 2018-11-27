@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { inject as controller } from '@ember/controller';
-import { alias } from '@ember/object/computed';
+import { alias, not } from '@ember/object/computed';
 
 export default Component.extend({
   scroller: service(),
@@ -10,6 +10,7 @@ export default Component.extend({
   intersectionalityController: controller('intersectionality'),
 
   lorde: alias('audreLorde'),
+  feminist: not('patriarchal'),
 
   didInsertElement() {
     this._super(...arguments);
