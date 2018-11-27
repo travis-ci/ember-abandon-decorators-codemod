@@ -78,12 +78,12 @@ module.exports = function transformer(file, api) {
       selectedMacros.includes(decorator.expression.callee.name);
   });
 
-  macros.forEach((injection) => {
-    let key = j.identifier(injection.value.key.name);
+  macros.forEach((macro) => {
+    let key = j.identifier(macro.value.key.name);
 
-    let valueArguments = injection.value.decorators[0].expression.arguments;
-    let value = j.callExpression(j.identifier(injection.value.decorators[0].expression.callee.name), valueArguments);
-    injection.replace(j.objectProperty(key, value));
+    let valueArguments = macro.value.decorators[0].expression.arguments;
+    let value = j.callExpression(j.identifier(macro.value.decorators[0].expression.callee.name), valueArguments);
+    macro.replace(j.objectProperty(key, value));
   });
 
   let attrImportStatements = root.find(j.ImportDeclaration, {
