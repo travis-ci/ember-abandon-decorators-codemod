@@ -1,7 +1,20 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { inject as controller } from '@ember/controller';
-import { alias, and, empty, equal, gt, mapBy, not, notEmpty, oneWay, or, reads } from '@ember/object/computed';
+import {
+  alias,
+  and,
+  empty,
+  equal,
+  filterBy,
+  gt,
+  mapBy,
+  not,
+  notEmpty,
+  oneWay,
+  or,
+  reads,
+} from '@ember/object/computed';
 
 export default Component.extend({
   scroller: service(),
@@ -24,6 +37,12 @@ export default Component.extend({
   tautological: or('patriarchal', 'feminist'),
 
   oppressionsAgain: oneWay('intersectionalityController.oppressions'),
+
+  trueOppressions: filterBy(
+    'intersectionalityController.perceivedOppressions',
+    'hasInstitutionalPower',
+    false
+  ),
 
   didInsertElement() {
     this._super(...arguments);

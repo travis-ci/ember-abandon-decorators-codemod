@@ -64,7 +64,7 @@ module.exports = function transformer(file, api) {
     importStatement.replace(j.importDeclaration(variable, j.literal('@ember/object/computed')));
   });
 
-  let selectedMacros = ['alias', 'and', 'empty', 'equal', 'gt', 'mapBy', 'not', 'notEmpty', 'oneWay', 'or', 'reads'];
+  let selectedMacros = ['alias', 'and', 'empty', 'equal', 'filterBy', 'gt', 'mapBy', 'not', 'notEmpty', 'oneWay', 'or', 'reads'];
 
   let macros = root.find(j.ObjectProperty, (property) => {
     if (!property.decorators) {
