@@ -71,7 +71,7 @@ module.exports = function transformer(file, api) {
 
     let decorator = property.decorators[0];
 
-    return decorator && ['alias', 'not'].includes(decorator.expression.callee.name);
+    return decorator && ['alias', 'empty', 'not', 'reads'].includes(decorator.expression.callee.name);
   });
 
   macros.forEach((injection) => {
