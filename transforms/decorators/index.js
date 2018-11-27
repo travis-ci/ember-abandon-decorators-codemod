@@ -71,12 +71,14 @@ module.exports = function transformer(file, api) {
 
     let decorator = property.decorators[0];
 
-    return decorator && ['alias', 'empty', 'not', 'reads'].includes(decorator.expression.callee.name);
+    return decorator && ['alias', 'and', 'empty', 'mapBy', 'not', 'or', 'reads'].includes(decorator.expression.callee.name);
   });
 
   macros.forEach((injection) => {
     let key = j.identifier(injection.value.key.name);
-    let value = j.callExpression(j.identifier(injection.value.decorators[0].expression.callee.name), [j.literal(injection.value.decorators[0].expression.arguments[0].value)]);
+
+    let valueArguments = injection.value.decorators[0].expression.arguments.map(argument => j.literal(argument.value));
+    let value = j.callExpression(j.identifier(injection.value.decorators[0].expression.callee.name), valueArguments);
     injection.replace(j.objectProperty(key, value));
   });
 

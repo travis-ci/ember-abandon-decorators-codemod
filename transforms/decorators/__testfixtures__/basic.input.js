@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import { service } from 'ember-decorators/service';
 import { controller } from 'ember-decorators/controller';
-import { alias, empty, not, reads } from 'ember-decorators/object/computed';
+import { alias, and, empty, mapBy, not, or, reads } from 'ember-decorators/object/computed';
 
 export default Component.extend({
   @service scroller: null,
@@ -13,6 +13,11 @@ export default Component.extend({
   @empty('oppressions') liberation: null,
   @not('patriarchal') feminist: null,
   @reads('intersectionalityController.oppressions') oppressions: null,
+
+  @mapBy('oppressions', 'axis') axes: null,
+
+  @and('feminist', 'liberation') consistent: null,
+  @or('patriarchal', 'feminist') tautological: null,
 
   didInsertElement() {
     this._super(...arguments);
