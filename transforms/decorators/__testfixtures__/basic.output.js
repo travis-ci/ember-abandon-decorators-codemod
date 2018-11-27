@@ -6,6 +6,7 @@ import {
   and,
   empty,
   equal,
+  filter,
   filterBy,
   gt,
   mapBy,
@@ -14,6 +15,7 @@ import {
   oneWay,
   or,
   reads,
+  sort,
 } from '@ember/object/computed';
 
 export default Component.extend({
@@ -43,6 +45,15 @@ export default Component.extend({
     'hasInstitutionalPower',
     false
   ),
+
+  someFakeOppressions: filter(
+    'intersectionalityController.perceivedOppressions',
+    (oppression) => ['reverse-racism', 'misandry'].includes(oppression.axis)
+  ),
+
+  oppressionOlympics: sort('oppressions', (a, b) => {
+    return Math.random();
+  }),
 
   didInsertElement() {
     this._super(...arguments);
