@@ -3,6 +3,7 @@ import { service } from 'ember-decorators/service';
 
 export default Component.extend({
   @service scroller: null,
+  @service('broadcasts') broadcastsService: null,
 
   didInsertElement() {
     this._super(...arguments);

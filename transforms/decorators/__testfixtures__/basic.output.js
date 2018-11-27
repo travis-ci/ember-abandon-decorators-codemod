@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 
 export default Component.extend({
   scroller: service(),
+  broadcastsService: service('broadcasts'),
 
   didInsertElement() {
     this._super(...arguments);
