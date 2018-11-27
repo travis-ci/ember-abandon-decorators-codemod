@@ -73,7 +73,9 @@ module.exports = function transformer(file, api) {
 
     let decorator = property.decorators[0];
 
-    return decorator && selectedMacros.includes(decorator.expression.callee.name);
+    return decorator &&
+      decorator.expression.callee && // Ensures the decorator takes arguments
+      selectedMacros.includes(decorator.expression.callee.name);
   });
 
   macros.forEach((injection) => {
@@ -82,6 +84,38 @@ module.exports = function transformer(file, api) {
     let valueArguments = injection.value.decorators[0].expression.arguments;
     let value = j.callExpression(j.identifier(injection.value.decorators[0].expression.callee.name), valueArguments);
     injection.replace(j.objectProperty(key, value));
+  });
+
+  let attrImportStatements = root.find(j.ImportDeclaration, {
+    source: { value: 'ember-decorators/data' }
+  });
+
+  attrImportStatements.forEach((importStatement) => {
+    let variable = importStatement.value.specifiers[0].imported.name;
+  
+    importStatement.replace(j.importDeclaration([j.importDefaultSpecifier(j.identifier(variable))], j.literal('ember-data/attr')));
+  });
+
+  let attrs = root.find(j.ObjectProperty, (property) => {
+    if (!property.decorators || !property.decorators[0]) {
+      return false;
+    }
+
+    let decorator = property.decorators[0];
+
+    return (decorator.expression.type == 'Identifier' && decorator.expression.name == 'attr') ||
+      (decorator.expression.type == 'CallExpression' && decorator.expression.callee.name == 'attr')
+  });
+
+  attrs.forEach((attr) => {
+    let decoratorExpression = attr.value.decorators[0].expression;
+
+    let key = j.identifier(attr.value.key.name);
+
+    let attrArguments = decoratorExpression.callee ? decoratorExpression.arguments : [];
+    let value = j.callExpression(j.identifier('attr'), attrArguments);
+
+    attr.replace(j.objectProperty(key, value));
   });
 
   return root.toSource({ quote: 'single' });

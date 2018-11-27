@@ -17,6 +17,7 @@ import {
   reads,
   sort,
 } from '@ember/object/computed';
+import attr from 'ember-data/attr';
 
 export default Component.extend({
   scroller: service(),
@@ -54,6 +55,9 @@ export default Component.extend({
   oppressionOlympics: sort('oppressions', (a, b) => {
     return Math.random();
   }),
+
+  untypedAttr: attr(),
+  typedAttr: attr('string'),
 
   didInsertElement() {
     this._super(...arguments);

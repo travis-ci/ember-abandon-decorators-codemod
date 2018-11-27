@@ -2,6 +2,7 @@ import Component from '@ember/component';
 import { service } from 'ember-decorators/service';
 import { controller } from 'ember-decorators/controller';
 import { alias, and, empty, equal, filter, filterBy, gt, mapBy, not, notEmpty, oneWay, or, reads, sort } from 'ember-decorators/object/computed';
+import { attr } from 'ember-decorators/data';
 
 export default Component.extend({
   @service scroller: null,
@@ -33,6 +34,9 @@ export default Component.extend({
     return Math.random();
   })
   oppressionOlympics: null,
+
+  @attr untypedAttr: '',
+  @attr('string') typedAttr: null,
 
   didInsertElement() {
     this._super(...arguments);
