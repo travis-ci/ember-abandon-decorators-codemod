@@ -1,7 +1,7 @@
 # ember-abandon-decorators-codemod
 
 
-A collection of codemod's for ember-abandon-decorators-codemod.
+A codemod to migrate away from 1.x Ember Decorators.
 
 ## Usage
 
