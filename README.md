@@ -1,7 +1,7 @@
 # ember-abandon-decorators-codemod
 
 
-A codemod to migrate away from 1.x Ember Decorators.
+A codemod to migrate away from 1.x Ember Decorators. Thanks to @rwjblue for [`codemod-cli`](https://github.com/rwjblue/codemod-cli) and @simonihmig for [`ember-test-helpers-codemod`](https://github.com/simonihmig/ember-test-helpers-codemod), which I looked to for guidance in this mysterious world of AST transforms.
 
 ## Usage
 
