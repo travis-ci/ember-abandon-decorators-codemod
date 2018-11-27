@@ -1,6 +1,8 @@
 {
   "name": "ember-abandon-decorators-codemod",
   "version": "0.1.0",
+  "description": "Migrate away from 1.x Ember Decorators",
+  "repository": "https://github.com/travis-ci/ember-abandon-decorators-codemod",
   "scripts": {
     "test": "codemod-cli test",
     "update-docs": "codemod-cli update-docs"
@@ -9,6 +11,8 @@
   "keywords": [
     "codemod-cli"
   ],
+  "author": "Buck Doyle <b@chromatin.ca>",
+  "license": "MIT",
   "dependencies": {
     "codemod-cli": "^0.2.7"
   },
