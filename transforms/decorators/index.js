@@ -64,6 +64,8 @@ module.exports = function transformer(file, api) {
     importStatement.replace(j.importDeclaration(variable, j.literal('@ember/object/computed')));
   });
 
+  let selectedMacros = ['alias', 'and', 'empty', 'equal', 'gt', 'mapBy', 'not', 'notEmpty', 'oneWay', 'or', 'reads'];
+
   let macros = root.find(j.ObjectProperty, (property) => {
     if (!property.decorators) {
       return false;
@@ -71,7 +73,7 @@ module.exports = function transformer(file, api) {
 
     let decorator = property.decorators[0];
 
-    return decorator && ['alias', 'and', 'empty', 'mapBy', 'not', 'or', 'reads'].includes(decorator.expression.callee.name);
+    return decorator && selectedMacros.includes(decorator.expression.callee.name);
   });
 
   macros.forEach((injection) => {

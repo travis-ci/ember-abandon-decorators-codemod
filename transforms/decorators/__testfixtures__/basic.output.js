@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { inject as controller } from '@ember/controller';
-import { alias, and, empty, mapBy, not, or, reads } from '@ember/object/computed';
+import { alias, and, empty, equal, gt, mapBy, not, notEmpty, oneWay, or, reads } from '@ember/object/computed';
 
 export default Component.extend({
   scroller: service(),
@@ -12,12 +12,18 @@ export default Component.extend({
   lorde: alias('audreLorde'),
   liberation: empty('oppressions'),
   feminist: not('patriarchal'),
+  continueTheStruggle: notEmpty('oppressions'),
   oppressions: reads('intersectionalityController.oppressions'),
+
+  applyIntersectionalAnalysis: gt('oppressions.length', 1),
+  singleIssue: equal('oppressions.length', 1),
 
   axes: mapBy('oppressions', 'axis'),
 
   consistent: and('feminist', 'liberation'),
   tautological: or('patriarchal', 'feminist'),
+
+  oppressionsAgain: oneWay('intersectionalityController.oppressions'),
 
   didInsertElement() {
     this._super(...arguments);
