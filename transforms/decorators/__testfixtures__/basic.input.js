@@ -4,6 +4,7 @@ import { controller } from 'ember-decorators/controller';
 import { alias, and, empty, equal, filter, filterBy, gt, mapBy, not, notEmpty, oneWay, or, reads, sort } from 'ember-decorators/object/computed';
 import { attr } from 'ember-decorators/data';
 import { action } from 'ember-decorators/object';
+import { computed } from 'ember-decorators/object';
 
 export default Component.extend({
   @service scroller: null,

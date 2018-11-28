@@ -196,6 +196,7 @@ module.exports = function transformer(file, api) {
    */
 
   root.find(j.ImportDeclaration, {
+    specifiers: [ { imported: { name: 'action' } } ],
     source: { value: 'ember-decorators/object' }
   }).forEach(actionImport => actionImport.prune());
 
@@ -232,6 +233,22 @@ module.exports = function transformer(file, api) {
       }
     });
   }
+
+  /*
+   * import { computed } from 'ember-decorators/object';
+   * becomes
+   * import { computed } from '@ember/object';
+   */
+
+  root.find(j.ImportDeclaration, {
+    specifiers: [ { imported: { name: 'computed' } } ],
+    source: { value: 'ember-decorators/object' }
+  }).forEach(computedImport => {
+    let importNames = computedImport.value.specifiers;
+    let importSource = j.literal('@ember/object');
+  
+    computedImport.replace(j.importDeclaration(importNames, importSource));
+  });
 
   return root.toSource({ quote: 'single' });
 }

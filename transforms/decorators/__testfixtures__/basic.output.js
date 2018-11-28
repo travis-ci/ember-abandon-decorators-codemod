@@ -20,6 +20,7 @@ import {
 } from '@ember/object/computed';
 
 import attr from 'ember-data/attr';
+import { computed } from '@ember/object';
 
 export default Component.extend({
   scroller: service(),
