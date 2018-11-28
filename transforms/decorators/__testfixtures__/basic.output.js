@@ -1,6 +1,7 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { inject as controller } from '@ember/controller';
+
 import {
   alias,
   and,
@@ -17,28 +18,23 @@ import {
   reads,
   sort,
 } from '@ember/object/computed';
+
 import attr from 'ember-data/attr';
 
 export default Component.extend({
   scroller: service(),
   broadcastsService: service('broadcasts'),
-
   intersectionalityController: controller('intersectionality'),
-
   lorde: alias('audreLorde'),
   liberation: empty('oppressions'),
   feminist: not('patriarchal'),
   continueTheStruggle: notEmpty('oppressions'),
   oppressions: reads('intersectionalityController.oppressions'),
-
   applyIntersectionalAnalysis: gt('oppressions.length', 1),
   singleIssue: equal('oppressions.length', 1),
-
   axes: mapBy('oppressions', 'axis'),
-
   consistent: and('feminist', 'liberation'),
   tautological: or('patriarchal', 'feminist'),
-
   oppressionsAgain: oneWay('intersectionalityController.oppressions'),
 
   trueOppressions: filterBy(
@@ -58,6 +54,16 @@ export default Component.extend({
 
   untypedAttr: attr(),
   typedAttr: attr('string'),
+
+  actions: {
+    joinTheResistance(name, location) {
+      alert(`Thanks for joining the struggle, ${name} from ${location}!`);
+    },
+
+    learn() {
+      this.increment('learning');
+    }
+  },
 
   didInsertElement() {
     this._super(...arguments);

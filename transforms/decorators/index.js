@@ -118,5 +118,30 @@ module.exports = function transformer(file, api) {
     attr.replace(j.objectProperty(key, value));
   });
 
+  root.find(j.ImportDeclaration, {
+    source: { value: 'ember-decorators/object' }
+  }).forEach(actionImport => actionImport.prune());
+
+  let actions = root.find(j.ObjectMethod, {
+    decorators: [{ type: 'Decorator', expression: { type: 'Identifier', name: 'action'} }]
+  });
+
+  if (actions.length > 0) {
+    let methods = [];
+    actions.forEach(action => {
+      methods.push(j.objectMethod('method', j.identifier(action.value.key.name), action.value.params, action.value.body));
+    });
+
+    let innards = j.objectExpression(methods);
+
+    actions.forEach((action, index) => {
+      if (index == 0) {
+        action.replace(j.objectProperty(j.identifier('actions'), innards))
+      } else {
+        action.prune();
+      }
+    });
+  }
+
   return root.toSource({ quote: 'single' });
 }

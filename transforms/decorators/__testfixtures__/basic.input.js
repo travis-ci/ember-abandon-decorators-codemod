@@ -3,6 +3,7 @@ import { service } from 'ember-decorators/service';
 import { controller } from 'ember-decorators/controller';
 import { alias, and, empty, equal, filter, filterBy, gt, mapBy, not, notEmpty, oneWay, or, reads, sort } from 'ember-decorators/object/computed';
 import { attr } from 'ember-decorators/data';
+import { action } from 'ember-decorators/object';
 
 export default Component.extend({
   @service scroller: null,
@@ -37,6 +38,16 @@ export default Component.extend({
 
   @attr untypedAttr: '',
   @attr('string') typedAttr: null,
+
+  @action
+  joinTheResistance(name, location) {
+    alert(`Thanks for joining the struggle, ${name} from ${location}!`);
+  },
+
+  @action
+  learn() {
+    this.increment('learning');
+  },
 
   didInsertElement() {
     this._super(...arguments);
