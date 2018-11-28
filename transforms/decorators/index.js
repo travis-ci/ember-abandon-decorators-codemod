@@ -188,10 +188,6 @@ module.exports = function transformer(file, api) {
     source: { value: 'ember-decorators/object' }
   }).forEach(actionImport => actionImport.prune());
 
-  let actions = root.find(j.ObjectMethod, {
-    decorators: [{ type: 'Decorator', expression: { type: 'Identifier', name: 'action'} }]
-  });
-
   /*
    * @action
    * joinTheResistance(name, location) {
@@ -204,6 +200,10 @@ module.exports = function transformer(file, api) {
    *   },
    * }
    */
+
+  let actions = root.find(j.ObjectMethod, {
+    decorators: [{ type: 'Decorator', expression: { type: 'Identifier', name: 'action'} }]
+  });
 
   if (actions.length > 0) {
     let methods = [];
