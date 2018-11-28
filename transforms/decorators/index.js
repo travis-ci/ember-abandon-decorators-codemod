@@ -250,5 +250,22 @@ module.exports = function transformer(file, api) {
     computedImport.replace(j.importDeclaration(importNames, importSource));
   });
 
+  // FIXME add description
+
+  let computeds = root.find(j.ObjectMethod, {
+    decorators: [{type: 'Decorator', expression: { type: 'CallExpression', callee: { type: 'Identifier', name: 'computed' }}}]
+  });
+
+  computeds.forEach(computed => {
+    let propertyName = j.identifier(computed.value.key.name);
+    let functionDeclaration = j.functionExpression(null, [], computed.value.body);
+
+    let decorator = computed.value.decorators[0];
+
+    let computedCall = j.callExpression(j.identifier('computed'), [...decorator.expression.arguments, functionDeclaration]);
+
+    computed.replace(j.objectProperty(propertyName, computedCall));
+  });
+
   return root.toSource({ quote: 'single' });
 }

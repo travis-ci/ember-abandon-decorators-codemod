@@ -66,6 +66,14 @@ export default Component.extend({
     }
   },
 
+  whiteSupremacy: computed(function() {
+    return '👎';
+  }),
+
+  typedAttrAccess: computed('typedAttr', function() {
+    console.log('typedAttr!');
+  }),
+
   didInsertElement() {
     this._super(...arguments);
     this.scroller.scrollToElement(this.element);

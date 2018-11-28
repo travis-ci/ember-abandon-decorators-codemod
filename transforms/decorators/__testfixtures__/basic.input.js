@@ -50,6 +50,16 @@ export default Component.extend({
     this.increment('learning');
   },
 
+  @computed()
+  whiteSupremacy() {
+    return '👎';
+  },
+
+  @computed('typedAttr')
+  typedAttrAccess() {
+    console.log('typedAttr!');
+  },
+
   didInsertElement() {
     this._super(...arguments);
     this.scroller.scrollToElement(this.element);
