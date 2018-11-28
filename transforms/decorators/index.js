@@ -15,9 +15,10 @@ module.exports = function transformer(file, api) {
   });
 
   serviceImportStatements.forEach((importStatement) => {
-    let variable = [j.importSpecifier(j.identifier('inject'), j.identifier('service'))];
+    let importName = [j.importSpecifier(j.identifier('inject'), j.identifier('service'))];
+    let importSource = j.literal('@ember/service');
   
-    importStatement.replace(j.importDeclaration(variable, j.literal('@ember/service')));
+    importStatement.replace(j.importDeclaration(importName, importSource));
   });
 
   /*
@@ -31,9 +32,9 @@ module.exports = function transformer(file, api) {
   });
 
   serviceInjections.forEach((injection) => {
-    let key = j.identifier(injection.value.key.name);
-    let value = j.callExpression(j.identifier('service'), []);
-    injection.replace(j.objectProperty(key, value));
+    let propertyName = j.identifier(injection.value.key.name);
+    let injectionCall = j.callExpression(j.identifier('service'), []);
+    injection.replace(j.objectProperty(propertyName, injectionCall));
   });
 
   /*
@@ -47,9 +48,12 @@ module.exports = function transformer(file, api) {
   });
 
   renamedServiceInjections.forEach((injection) => {
-    let key = j.identifier(injection.value.key.name);
-    let value = j.callExpression(j.identifier('service'), [j.literal(injection.value.decorators[0].expression.arguments[0].value)]);
-    injection.replace(j.objectProperty(key, value));
+    let propertyName = j.identifier(injection.value.key.name);
+
+    let controllerName = j.literal(injection.value.decorators[0].expression.arguments[0].value);
+    let injectionCall = j.callExpression(j.identifier('service'), [controllerName]);
+
+    injection.replace(j.objectProperty(propertyName, injectionCall));
   });
 
   /*
@@ -63,9 +67,10 @@ module.exports = function transformer(file, api) {
   });
 
   controllerImportStatements.forEach((importStatement) => {
-    let variable = [j.importSpecifier(j.identifier('inject'), j.identifier('controller'))];
+    let importName = [j.importSpecifier(j.identifier('inject'), j.identifier('controller'))];
+    let importSource = j.literal('@ember/controller');
   
-    importStatement.replace(j.importDeclaration(variable, j.literal('@ember/controller')));
+    importStatement.replace(j.importDeclaration(importName, importSource));
   });
 
   /*
@@ -79,9 +84,12 @@ module.exports = function transformer(file, api) {
   });
 
   renamedControllerInjections.forEach((injection) => {
-    let key = j.identifier(injection.value.key.name);
-    let value = j.callExpression(j.identifier('controller'), [j.literal(injection.value.decorators[0].expression.arguments[0].value)]);
-    injection.replace(j.objectProperty(key, value));
+    let propertyName = j.identifier(injection.value.key.name);
+
+    let controllerName = j.literal(injection.value.decorators[0].expression.arguments[0].value);
+    let injectionCall = j.callExpression(j.identifier('controller'), [controllerName]);
+
+    injection.replace(j.objectProperty(propertyName, injectionCall));
   });
 
   /*
@@ -95,9 +103,10 @@ module.exports = function transformer(file, api) {
   });
 
   macroImportStatements.forEach((importStatement) => {
-    let variable = importStatement.value.specifiers;
+    let importNames = importStatement.value.specifiers;
+    let importSource = j.literal('@ember/object/computed');
   
-    importStatement.replace(j.importDeclaration(variable, j.literal('@ember/object/computed')));
+    importStatement.replace(j.importDeclaration(importNames, importSource));
   });
 
   /*
@@ -126,11 +135,12 @@ module.exports = function transformer(file, api) {
   });
 
   macros.forEach((macro) => {
-    let key = j.identifier(macro.value.key.name);
+    let propertyName = j.identifier(macro.value.key.name);
 
-    let valueArguments = macro.value.decorators[0].expression.arguments;
-    let value = j.callExpression(j.identifier(macro.value.decorators[0].expression.callee.name), valueArguments);
-    macro.replace(j.objectProperty(key, value));
+    let macroArguments = macro.value.decorators[0].expression.arguments;
+    let macroName = j.identifier(macro.value.decorators[0].expression.callee.name);
+    let macroCall = j.callExpression(macroName, macroArguments);
+    macro.replace(j.objectProperty(propertyName, macroCall));
   });
 
   /*
@@ -144,9 +154,10 @@ module.exports = function transformer(file, api) {
   });
 
   attrImportStatements.forEach((importStatement) => {
-    let variable = importStatement.value.specifiers[0].imported.name;
+    let importName = j.identifier(importStatement.value.specifiers[0].imported.name);
+    let importSource = j.literal('ember-data/attr');
   
-    importStatement.replace(j.importDeclaration([j.importDefaultSpecifier(j.identifier(variable))], j.literal('ember-data/attr')));
+    importStatement.replace(j.importDeclaration([j.importDefaultSpecifier(importName)], importSource));
   });
 
   /*
@@ -171,12 +182,12 @@ module.exports = function transformer(file, api) {
   attrs.forEach((attr) => {
     let decoratorExpression = attr.value.decorators[0].expression;
 
-    let key = j.identifier(attr.value.key.name);
+    let propertyName = j.identifier(attr.value.key.name);
 
     let attrArguments = decoratorExpression.callee ? decoratorExpression.arguments : [];
-    let value = j.callExpression(j.identifier('attr'), attrArguments);
+    let attrCall = j.callExpression(j.identifier('attr'), attrArguments);
 
-    attr.replace(j.objectProperty(key, value));
+    attr.replace(j.objectProperty(propertyName, attrCall));
   });
 
   /*
@@ -206,16 +217,16 @@ module.exports = function transformer(file, api) {
   });
 
   if (actions.length > 0) {
-    let methods = [];
+    let actionMethods = [];
     actions.forEach(action => {
-      methods.push(j.objectMethod('method', j.identifier(action.value.key.name), action.value.params, action.value.body));
+      actionMethods.push(j.objectMethod('method', j.identifier(action.value.key.name), action.value.params, action.value.body));
     });
 
-    let innards = j.objectExpression(methods);
+    let actionMethodsObject = j.objectExpression(actionMethods);
 
     actions.forEach((action, index) => {
       if (index == 0) {
-        action.replace(j.objectProperty(j.identifier('actions'), innards))
+        action.replace(j.objectProperty(j.identifier('actions'), actionMethodsObject))
       } else {
         action.prune();
       }
