@@ -260,11 +260,26 @@ module.exports = function transformer(file, api) {
     let propertyName = j.identifier(computed.value.key.name);
     let decorator = computed.value.decorators[0];
 
+    let expandedDecoratorArguments = [];
+
+    decorator.expression.arguments.forEach(argument => {
+      let value = argument.value;
+
+      if (value.indexOf('{') !== -1) {
+        let root = value.substring(0, value.indexOf('{'));
+        let insideBrackets = value.substring(value.indexOf('{') + 1, value.indexOf('}'));
+
+        insideBrackets.split(',').forEach(key => expandedDecoratorArguments.push(`${root}${key}`));
+      } else {
+        expandedDecoratorArguments.push(value);
+      }
+    });
+
     let declarations = [];
 
     computed.value.params.forEach((param, index) => {
-      let decoratorArgument = decorator.expression.arguments[index];
-      let getCall = j.callExpression(j.memberExpression(j.thisExpression(), j.identifier('get')), [j.literal(decoratorArgument.value)]);
+      let decoratorArgument = expandedDecoratorArguments[index];
+      let getCall = j.callExpression(j.memberExpression(j.thisExpression(), j.identifier('get')), [j.literal(decoratorArgument)]);
 
       let declaration = j.variableDeclaration('let', [j.variableDeclarator(j.identifier(param.name), getCall)]);
       declarations.push(declaration);

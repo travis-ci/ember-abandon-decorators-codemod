@@ -79,6 +79,16 @@ export default Component.extend({
     return audreLorde*2;
   }),
 
+  smithThreePillars: computed(
+    'whiteSupremacy.{slaveryCapitalism,genocideColonialism,orientalismWar}',
+    function() {
+      let slaveryCapitalism = this.get('whiteSupremacy.slaveryCapitalism');
+      let genocideColonialism = this.get('whiteSupremacy.genocideColonialism');
+      let orientalismWar = this.get('whiteSupremacy.orientalismWar');
+      return NaN;
+    }
+  ),
+
   didInsertElement() {
     this._super(...arguments);
     this.scroller.scrollToElement(this.element);
