@@ -28,7 +28,7 @@ module.exports = function transformer(file, api) {
 
     declarations.forEach((declaration, index) => {
       if (index === 0) {
-        declaration.replace(j.importDeclaration(specifiers, j.literal(source)));
+        declaration.value.specifiers = specifiers;
       } else {
         declaration.prune();
       }
