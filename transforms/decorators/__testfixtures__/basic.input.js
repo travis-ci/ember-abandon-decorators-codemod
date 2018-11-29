@@ -60,6 +60,11 @@ export default Component.extend({
     console.log('typedAttr!');
   },
 
+  @computed('lorde')
+  lordeLorde(lorde) {
+    return lorde*2;
+  },
+
   didInsertElement() {
     this._super(...arguments);
     this.scroller.scrollToElement(this.element);
