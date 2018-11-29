@@ -262,8 +262,10 @@ module.exports = function transformer(file, api) {
 
     let declarations = [];
 
-    computed.value.params.forEach(param => {
-      let getCall = j.callExpression(j.memberExpression(j.thisExpression(), j.identifier('get')), [j.literal(param.name)]);
+    computed.value.params.forEach((param, index) => {
+      let decoratorArgument = decorator.expression.arguments[index];
+      let getCall = j.callExpression(j.memberExpression(j.thisExpression(), j.identifier('get')), [j.literal(decoratorArgument.value)]);
+
       let declaration = j.variableDeclaration('let', [j.variableDeclarator(j.identifier(param.name), getCall)]);
       declarations.push(declaration);
     });

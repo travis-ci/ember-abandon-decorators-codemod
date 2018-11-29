@@ -75,8 +75,8 @@ export default Component.extend({
   }),
 
   lordeLorde: computed('lorde', function() {
-    let lorde = this.get('lorde');
-    return lorde*2;
+    let audreLorde = this.get('lorde');
+    return audreLorde*2;
   }),
 
   didInsertElement() {

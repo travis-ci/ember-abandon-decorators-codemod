@@ -61,8 +61,8 @@ export default Component.extend({
   },
 
   @computed('lorde')
-  lordeLorde(lorde) {
-    return lorde*2;
+  lordeLorde(audreLorde) {
+    return audreLorde*2;
   },
 
   didInsertElement() {
