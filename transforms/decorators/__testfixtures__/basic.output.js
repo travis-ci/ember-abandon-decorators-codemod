@@ -94,6 +94,11 @@ export default Component.extend({
     return axes.sort();
   }),
 
+  somethinglol: computed('oppressions.@each.{hasInstitutionalPower,axis}', function() {
+    let oppressions = this.get('oppressions');
+    return NaN;
+  }),
+
   didInsertElement() {
     this._super(...arguments);
     this.scroller.scrollToElement(this.element);

@@ -265,7 +265,9 @@ module.exports = function transformer(file, api) {
     decorator.expression.arguments.forEach(argument => {
       let value = argument.value;
 
-      if (value.indexOf('{') !== -1) {
+      if (value.indexOf('@each') !== -1) {
+        expandedDecoratorArguments.push(value.substring(0, value.indexOf('.@each')));
+      } else if (value.indexOf('{') !== -1) {
         let root = value.substring(0, value.indexOf('{'));
         let insideBrackets = value.substring(value.indexOf('{') + 1, value.indexOf('}'));
 
