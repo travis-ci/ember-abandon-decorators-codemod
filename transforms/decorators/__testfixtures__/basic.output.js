@@ -75,7 +75,7 @@ export default Component.extend({
   }),
 
   lordeLorde: computed('lorde', function() {
-    let audreLorde = this.get('lorde');
+    let audreLorde = this.get('lorde') || 'excellent';
     return audreLorde*2;
   }),
 

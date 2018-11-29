@@ -61,7 +61,7 @@ export default Component.extend({
   },
 
   @computed('lorde')
-  lordeLorde(audreLorde) {
+  lordeLorde(audreLorde = 'excellent') {
     return audreLorde*2;
   },
 

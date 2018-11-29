@@ -285,7 +285,19 @@ module.exports = function transformer(file, api) {
       let decoratorArgument = expandedDecoratorArguments[index];
       let getCall = j.callExpression(j.memberExpression(j.thisExpression(), j.identifier('get')), [j.literal(decoratorArgument)]);
 
-      let declaration = j.variableDeclaration('let', [j.variableDeclarator(j.identifier(param.name), getCall)]);
+      let declaration;
+
+      if (param.type === 'Identifier') {
+        declaration = j.variableDeclaration('let', [j.variableDeclarator(j.identifier(param.name), getCall)]);
+      } else if (param.type === 'AssignmentPattern') {
+        // (something = 'default') becomes let something = this.get('something') || 'default'
+
+        let assignment = param;
+
+        let orExpression = j.logicalExpression('||', getCall, assignment.right);
+        declaration = j.variableDeclaration('let', [j.variableDeclarator(j.identifier(assignment.left.name), orExpression)])
+      }
+
       declarations.push(declaration);
     });
 
