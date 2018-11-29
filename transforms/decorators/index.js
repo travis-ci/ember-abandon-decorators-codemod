@@ -193,12 +193,30 @@ module.exports = function transformer(file, api) {
   /*
    * import { action } from 'ember-decorators/object';
    * is removed
+   * 
+   * import { action, computed, observes } from 'ember-decorators/object'
+   * becomes
+   * import { computed, observes } from '@ember/object'
    */
 
   root.find(j.ImportDeclaration, {
-    specifiers: [ { imported: { name: 'action' } } ],
     source: { value: 'ember-decorators/object' }
-  }).forEach(actionImport => actionImport.prune());
+  }).forEach(computedImport => {
+    let importNames = [];
+
+    computedImport.value.specifiers.forEach(specifier => {
+      if (specifier.imported.name !== 'action') {
+        importNames.push(specifier);
+      }
+    });
+    let importSource = j.literal('@ember/object');
+  
+    if (importNames.length > 0) {
+      computedImport.replace(j.importDeclaration(importNames, importSource));
+    } else {
+      computedImport.prune();
+    }
+  });
 
   /*
    * @action
@@ -233,22 +251,6 @@ module.exports = function transformer(file, api) {
       }
     });
   }
-
-  /*
-   * import { computed } from 'ember-decorators/object';
-   * becomes
-   * import { computed } from '@ember/object';
-   */
-
-  root.find(j.ImportDeclaration, {
-    specifiers: [ { imported: { name: 'computed' } } ],
-    source: { value: 'ember-decorators/object' }
-  }).forEach(computedImport => {
-    let importNames = computedImport.value.specifiers;
-    let importSource = j.literal('@ember/object');
-  
-    computedImport.replace(j.importDeclaration(importNames, importSource));
-  });
 
   // FIXME add description
 

@@ -5,6 +5,7 @@ import { alias, and, empty, equal, filter, filterBy, gt, mapBy, not, notEmpty, o
 import { attr } from 'ember-decorators/data';
 import { action } from 'ember-decorators/object';
 import { computed } from 'ember-decorators/object';
+import { action, computed, observes } from 'ember-decorators/object';
 
 export default Component.extend({
   @service scroller: null,
