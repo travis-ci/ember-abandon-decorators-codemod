@@ -270,6 +270,8 @@ module.exports = function transformer(file, api) {
         let insideBrackets = value.substring(value.indexOf('{') + 1, value.indexOf('}'));
 
         insideBrackets.split(',').forEach(key => expandedDecoratorArguments.push(`${root}${key}`));
+      } else if (value.indexOf('.[]') !== -1) {
+        expandedDecoratorArguments.push(value.replace('.[]', ''));
       } else {
         expandedDecoratorArguments.push(value);
       }

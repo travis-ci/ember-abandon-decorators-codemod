@@ -89,6 +89,11 @@ export default Component.extend({
     }
   ),
 
+  sortedAxes: computed('axes.[]', function() {
+    let axes = this.get('axes');
+    return axes.sort();
+  }),
+
   didInsertElement() {
     this._super(...arguments);
     this.scroller.scrollToElement(this.element);

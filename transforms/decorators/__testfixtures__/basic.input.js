@@ -70,6 +70,11 @@ export default Component.extend({
     return NaN;
   },
 
+  @computed('axes.[]')
+  sortedAxes(axes) {
+    return axes.sort();
+  },
+
   didInsertElement() {
     this._super(...arguments);
     this.scroller.scrollToElement(this.element);
