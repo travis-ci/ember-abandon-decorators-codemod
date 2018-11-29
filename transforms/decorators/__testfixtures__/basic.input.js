@@ -80,6 +80,13 @@ export default Component.extend({
     return NaN;
   },
 
+  @not('whiteSupremacy.genocideColonialism') 'aria-dismantle-settler-colonialism': null,
+
+  @computed('whiteSupremacy.slaveryCapitalism')
+  'a-dasherised-pillar'(slaveryCapitalism) {
+    return slaveryCapitalism;
+  },
+
   didInsertElement() {
     this._super(...arguments);
     this.scroller.scrollToElement(this.element);

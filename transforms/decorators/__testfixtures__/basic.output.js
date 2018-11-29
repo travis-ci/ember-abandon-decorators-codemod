@@ -99,6 +99,13 @@ export default Component.extend({
     return NaN;
   }),
 
+  'aria-dismantle-settler-colonialism': not('whiteSupremacy.genocideColonialism'),
+
+  'a-dasherised-pillar': computed('whiteSupremacy.slaveryCapitalism', function() {
+    let slaveryCapitalism = this.get('whiteSupremacy.slaveryCapitalism');
+    return slaveryCapitalism;
+  }),
+
   didInsertElement() {
     this._super(...arguments);
     this.scroller.scrollToElement(this.element);

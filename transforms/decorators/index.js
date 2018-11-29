@@ -135,7 +135,7 @@ module.exports = function transformer(file, api) {
   });
 
   macros.forEach((macro) => {
-    let propertyName = j.identifier(macro.value.key.name);
+    let propertyName = macro.value.key;
 
     let macroArguments = macro.value.decorators[0].expression.arguments;
     let macroName = j.identifier(macro.value.decorators[0].expression.callee.name);
@@ -257,7 +257,7 @@ module.exports = function transformer(file, api) {
   });
 
   computeds.forEach(computed => {
-    let propertyName = j.identifier(computed.value.key.name);
+    let propertyName = computed.value.key;
     let decorator = computed.value.decorators[0];
 
     let expandedDecoratorArguments = [];
