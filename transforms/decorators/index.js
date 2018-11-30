@@ -255,6 +255,33 @@ module.exports = function transformer(file, api) {
     });
   }
 
+  /*
+   * @observes('tautological')
+   * noteParadox() {
+   *   alert('what does it all mean');
+   * }
+   * becomes
+   * noteParadox: observer('tautological', function() {
+   *  alert('what does it all mean');
+   * })
+   */
+
+  let observers = root.find(j.ObjectMethod, {
+    decorators: [{type: 'Decorator', expression: { type: 'CallExpression', callee: { type: 'Identifier', name: 'observes' }}}]
+  });
+
+  if (observers.length > 0) {
+    observers.forEach(observer => {
+      let propertyName = observer.value.key;
+      let decorator = observer.value.decorators[0];
+
+      let functionDeclaration = j.functionExpression(null, [], observer.value.body);
+      let observerCall = j.callExpression(j.identifier('observer'), [...decorator.expression.arguments, functionDeclaration]);
+  
+      observer.replace(j.objectProperty(propertyName, observerCall));
+    });
+  }
+
   // FIXME add description
 
   let computeds = root.find(j.ObjectMethod, {

@@ -51,6 +51,11 @@ export default Component.extend({
     this.increment('learning');
   },
 
+  @observes('tautological')
+  noteParadox() {
+    alert('what does it all mean');
+  },
+
   @computed()
   whiteSupremacy() {
     return '👎';

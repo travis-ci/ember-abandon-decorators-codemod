@@ -67,6 +67,10 @@ export default Component.extend({
     }
   },
 
+  noteParadox: observer('tautological', function() {
+    alert('what does it all mean');
+  }),
+
   whiteSupremacy: computed(function() {
     return '👎';
   }),
