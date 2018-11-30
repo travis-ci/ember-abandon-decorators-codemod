@@ -196,7 +196,7 @@ module.exports = function transformer(file, api) {
    * 
    * import { action, computed, observes } from 'ember-decorators/object'
    * becomes
-   * import { computed, observes } from '@ember/object'
+   * import { computed, observer } from '@ember/object'
    */
 
   root.find(j.ImportDeclaration, {
@@ -206,6 +206,9 @@ module.exports = function transformer(file, api) {
 
     computedImport.value.specifiers.forEach(specifier => {
       if (specifier.imported.name !== 'action') {
+        if (specifier.imported.name === 'observes') {
+          specifier.imported.name = 'observer';
+        }
         importNames.push(specifier);
       }
     });
