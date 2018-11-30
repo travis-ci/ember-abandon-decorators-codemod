@@ -23,6 +23,8 @@ ember-abandon-decorators-codemod <TRANSFORM NAME> path/of/files/ or/some**/*glob
 ## Transforms
 
 <!--TRANSFORMS_START-->
+* [consolidate-imports](transforms/consolidate-imports/README.md)
+* [decorators](transforms/decorators/README.md)
 <!--TRANSFORMS_END-->
 
 ## Contributing
